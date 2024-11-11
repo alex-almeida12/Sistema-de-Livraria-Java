@@ -32,15 +32,9 @@ public class App {
 
         // Adicionando usuario
         // Adicionando usuários
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(1993, Calendar.MAY, 26);
-        Date dataNascimento1 = calendar.getTime();
-
-        calendar.set(2000, Calendar.MAY, 15);
-        Date dataNascimento2 = calendar.getTime();
-
-        calendar.set(1995, Calendar.MARCH, 20);
-        Date dataNascimento3 = calendar.getTime();
+        Date dataNascimento1 = new Date(93, 4, 26);
+        Date dataNascimento2 = new Date(100, 4, 15);
+        Date dataNascimento3 = new Date(95, 2, 20);
 
         Usuario usuario1 = new Usuario("Alex", dataNascimento1, "alex.almeida12@gmail.com");
         Usuario usuario2 = new Usuario("João", dataNascimento2, "joao@email.com");
