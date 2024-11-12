@@ -61,10 +61,17 @@ public class App {
             System.out.println("4. Fazer um Emprestimo.");
             System.out.println("5. Consultar Livros.");
             System.out.println("6. Consultar Usuários.");
-            System.out.println("7. Consultar Autor");
+            System.out.println("7. Consultar Autores.");
             System.out.println("8. Consultar Histórico de Emprestimos.");
             System.out.println("9. Consultar Emprestimos ativos.");
             System.out.println("10. Consultar Emprestimos por Usuário.");
+            System.out.println("11. Devolver Livro.");
+            System.out.println("12: Atualizar Livro.");
+            System.out.println("13: Atualizar Usuário.");
+            System.out.println("14: Atualizar Autor.");
+            System.out.println("15: Remover Livro.");
+            System.out.println("16: Remover Usuário.");
+            System.out.println("17: Remover Autor.");
             System.out.println("0. Sair");
             menu = scanner.nextInt();
             scanner.nextLine();
@@ -77,17 +84,21 @@ public class App {
                     System.out.println("A lista de Autores está vázia, Adicione um autor.");
                 } else {
                     List<Autor> autoresAux = biblioteca.listarAutores();
-                    ;
 
                     for (Autor autorAux : autoresAux) {
                         System.out.println(autorAux.getId() + " " + autorAux.getNome());
                     }
 
                     int id = scanner.nextInt();
+                    scanner.nextLine();
                     Autor autor = biblioteca.buscarAutorPorId(id);
-                    Livro livroaux = new Livro(titulo, autor);
-                    biblioteca.adicionarLivro(livroaux);
-                    System.out.println("Livro Adicionado Com Sucesso.");
+                    if (autor != null) {
+                        Livro livroAux = new Livro(titulo, autor);
+                        biblioteca.adicionarLivro(livroAux);
+                        System.out.println("Livro Adicionado Com Sucesso.");
+                    } else {
+                        System.out.println("Autor não encontrado com o ID fornecido.");
+                    }
                 }
 
             } else if (menu == 2) {
@@ -146,44 +157,64 @@ public class App {
                 }
             } else if (menu == 4) {
                 System.out.println("Digite o ID do Livro que você quer pegar emprestado, conforme a lista abaixo:");
+
+                // Verifica se há livros disponíveis para empréstimo
                 if (biblioteca.listarLivrosDisponiveis().isEmpty()) {
-                    System.out.println("Não há livros disponiveis para empréstimo.");
+                    System.out.println("Não há livros disponíveis para empréstimo.");
                 } else {
                     List<Livro> livrosAux2 = biblioteca.listarLivrosDisponiveis();
-                    ;
+
 
                     for (Livro livroAux : livrosAux2) {
                         System.out.println(livroAux.getId() + " " + livroAux.getTitulo());
                     }
 
-                }
 
-                int id = scanner.nextInt();
-                Livro livro = biblioteca.buscarLivroPorId(id);
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
 
-                System.out.println("Digite o ID do Usuário que quer pegar o Livro emprestado, conforme a lista abaixo:");
-                if (biblioteca.listarUsuarios().isEmpty()) {
-                    System.out.println("Não há usuários cadastrados, adicione um usuário");
-                } else {
-                    List<Usuario> usuariosAux2 = biblioteca.listarUsuarios();
 
-                    for (Usuario usuarioAux : usuariosAux2) {
-                        System.out.println(usuarioAux.getId() + " " + usuarioAux.getNome());
+                    Livro livro = biblioteca.buscarLivroPorId(id);
+
+                    if (livro != null) {
+                        System.out.println("Digite o ID do Usuário que quer pegar o Livro emprestado, conforme a lista abaixo:");
+
+
+                        if (biblioteca.listarUsuarios().isEmpty()) {
+                            System.out.println("Não há usuários cadastrados, adicione um usuário.");
+                        } else {
+                            List<Usuario> usuariosAux2 = biblioteca.listarUsuarios();
+
+
+                            for (Usuario usuarioAux : usuariosAux2) {
+                                System.out.println(usuarioAux.getId() + " " + usuarioAux.getNome());
+                            }
+
+
+                            int id2 = scanner.nextInt();
+                            scanner.nextLine();
+
+
+                            Usuario usuario = biblioteca.buscarUsuarioPorId(id2);
+
+                            if (usuario != null) {
+
+                                biblioteca.emprestarLivro(livro, usuario);
+                                System.out.println("Empréstimo Realizado Com Sucesso.");
+                            } else {
+                                System.out.println("Usuário não encontrado com o ID fornecido.");
+                            }
+                        }
+                    } else {
+                        System.out.println("Livro não encontrado com o ID fornecido.");
                     }
                 }
-
-                int id2 = scanner.nextInt();
-                Usuario usuario = biblioteca.buscarUsuarioPorId(id);
-                biblioteca.emprestarLivro(livro, usuario);
-
-                System.out.println("Empréstimo Realizado Com Sucesso.");
 
             } else if (menu == 5) {
                 if (biblioteca.listarLivros().isEmpty()) {
                     System.out.println("Não há livros cadastrados, adicione um livro");
                 } else {
                     List<Livro> livrosAux2 = biblioteca.listarLivros();
-                    ;
 
                     for (Livro livroAux : livrosAux2) {
                         System.out.println(livroAux.getId() + " " + livroAux.getTitulo() + " " + (livroAux.isDisponivel() ? "Disponível" : "Emprestado"));
@@ -194,7 +225,6 @@ public class App {
                     System.out.println("Não há Usuários cadastrados, adicione um Usuário");
                 } else {
                     List<Usuario> usuariosAux2 = biblioteca.listarUsuarios();
-                    ;
 
                     for (Usuario usuarioAux : usuariosAux2) {
                         System.out.println(usuarioAux.getId() + " " + usuarioAux.getNome());
@@ -205,7 +235,7 @@ public class App {
                     System.out.println("Não há Autores cadastrados, adicione um Autor");
                 } else {
                     List<Autor> autoresAux2 = biblioteca.listarAutores();
-                    ;
+
 
                     for (Autor autoresAux : autoresAux2) {
                         System.out.println(autoresAux.getId() + " " + autoresAux.getNome());
@@ -216,7 +246,7 @@ public class App {
                     System.out.println("Não há emprestimos");
                 } else {
                     List<Emprestimo> emprestimosAux2 = biblioteca.listarEmprestimos();
-                    ;
+
 
                     for (Emprestimo emprestimoAux : emprestimosAux2) {
                         System.out.println(emprestimoAux.getId() + " " + emprestimoAux.getLivro().getTitulo() + " " + emprestimoAux.getUsuario().getNome() + " " + (emprestimoAux.isAtivo() ? "Ativo" : "Devolvido"));
@@ -246,14 +276,188 @@ public class App {
                 }
 
                 int id2 = scanner.nextInt();
+                scanner.nextLine();
 
-                List<Emprestimo> emprestimosUsuario = biblioteca.listarEmprestimosPorUsuario(usuario1.getId());
+                Usuario usuario = biblioteca.buscarUsuarioPorId(id2);
 
-                for (Emprestimo emprestimo : emprestimosUsuario) {
-                    System.out.println(emprestimo.getLivro());
+                if (usuario != null) {
+
+                    List<Emprestimo> emprestimosUsuario = biblioteca.listarEmprestimosPorUsuario(id2);
+
+                    if (emprestimosUsuario.isEmpty()) {
+                        System.out.println("O usuário não possui empréstimos.");
+                    } else {
+
+                        System.out.println("Empréstimos do usuário " + usuario.getNome() + ":");
+                        for (Emprestimo emprestimo : emprestimosUsuario) {
+                            Livro livro = emprestimo.getLivro();
+                            System.out.println("Título: " + livro.getTitulo());
+                            System.out.println("Autor: " + livro.getAutor().getNome());
+                            System.out.println("Data de Empréstimo: " + emprestimo.getDataEmprestimo());
+                            System.out.println("Data de Devolução: " + emprestimo.getDataDevolucao());
+                            System.out.println("Status: " + (emprestimo.isAtivo() ? "Ativo" : "Devolvido"));
+                            System.out.println("--------------------------------------------");
+                        }
+                    }
+                } else {
+                    System.out.println("Usuário não encontrado com o ID fornecido.");
                 }
-            }
+            } else if (menu == 11) {
+                if (biblioteca.listarEmprestimos().isEmpty()) {
+                    System.out.println("Não há emprestimos");
+                } else {
+                    List<Emprestimo> emprestimosAux2 = biblioteca.listarEmprestimos().stream()
+                            .filter(Emprestimo::isAtivo)
+                            .collect(Collectors.toList());
+                    for (Emprestimo emprestimoAux : emprestimosAux2) {
+                        System.out.println(emprestimoAux.getId() + " " + emprestimoAux.getLivro().getTitulo() + " " + emprestimoAux.getUsuario().getNome() + " " + (emprestimoAux.isAtivo() ? "Ativo" : "Devolvido"));
+                    }
+                    System.out.println("Digite o ID do empréstimo que deseja devolver:");
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
+                    if (emprestimosAux2.stream().anyMatch(emprestimo -> emprestimo.getId() == id)) {
+                        biblioteca.devolverLivro(id);
+                        System.out.println("Livro Devolvido com Sucesso.");
+                    } else {
+                        System.out.println("Não há Emprestimos com esse ID.");
+                    }
+                }
 
+            }else if (menu == 12) {
+                if (biblioteca.listarLivros().isEmpty()) {
+                    System.out.println("Não há livros cadastrados, adicione um livro");
+                } else {
+                    List<Livro> livrosAux2 = biblioteca.listarLivros();
+
+                    for (Livro livroAux : livrosAux2) {
+                        System.out.println(livroAux.getId() + " " + livroAux.getTitulo() + " " + (livroAux.isDisponivel() ? "Disponível" : "Emprestado"));
+                    }
+                    System.out.println("Digite o ID do Livro que você Atualizar o Título:");
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
+                    if (livrosAux2.stream().anyMatch(livro -> livro.getId() == id)) {
+                        System.out.println("Digite o novo Título do Livro:");
+                        String titulo = scanner.nextLine();
+                        biblioteca.atualizarLivro(id,titulo);
+                        System.out.println("Livro Atualizado.");
+                    } else {
+                        System.out.println("Não há Livros com esse ID.");
+                    }
+
+                }
+            } else if (menu == 13) {
+                if (biblioteca.listarUsuarios().isEmpty()) {
+                    System.out.println("Não há Usuários cadastrados, adicione um Usuário");
+                } else {
+                    List<Usuario> usuariosAux2 = biblioteca.listarUsuarios();
+
+
+                    for (Usuario usuarioAux : usuariosAux2) {
+                        System.out.println(usuarioAux.getId() + " " + usuarioAux.getNome());
+                    }
+
+                    System.out.println("Digite o ID do Usuário que você Atualizar o Nome:");
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
+                    if (usuariosAux2.stream().anyMatch(usuario -> usuario.getId() == id)) {
+                        System.out.println("Digite o novo Nome do Usuário:");
+                        String nome = scanner.nextLine();
+                        biblioteca.atualizarUsuario(id,nome);
+                        System.out.println("Usuário Atualizado.");
+                    } else {
+                        System.out.println("Não há Usuários com esse ID.");
+                    }
+                }
+            } else if (menu == 14) {
+                if (biblioteca.listarAutores().isEmpty()) {
+                    System.out.println("Não há Autores cadastrados, adicione um Autor");
+                } else {
+                    List<Autor> autoresAux2 = biblioteca.listarAutores();
+
+
+                    for (Autor autoresAux : autoresAux2) {
+                        System.out.println(autoresAux.getId() + " " + autoresAux.getNome());
+                    }
+
+                    System.out.println("Digite o ID do Autor que você Atualizar o Nome:");
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
+                    if (autoresAux2.stream().anyMatch(autor -> autor.getId() == id)) {
+                        System.out.println("Digite o novo Nome do Autor:");
+                        String nome = scanner.nextLine();
+                        biblioteca.atualizarAutor(id,nome);
+                        System.out.println("Autor Atualizado.");
+                    } else {
+                        System.out.println("Não há Autores com esse ID.");
+                    }
+                }
+            }else if (menu == 15) {
+                if (biblioteca.listarLivros().isEmpty()) {
+                    System.out.println("Não há livros cadastrados, adicione um livro");
+                } else {
+                    List<Livro> livrosAux2 = biblioteca.listarLivros();
+
+                    for (Livro livroAux : livrosAux2) {
+                        System.out.println(livroAux.getId() + " " + livroAux.getTitulo() + " " + (livroAux.isDisponivel() ? "Disponível" : "Emprestado"));
+                    }
+                    System.out.println("Digite o ID do Livro que você quer Remover:");
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
+                    if (livrosAux2.stream().anyMatch(livro -> livro.getId() == id)) {
+                        biblioteca.removerLivro(id);
+                        System.out.println("Livro Removido.");
+                    } else {
+                        System.out.println("Não há Livros com esse ID.");
+                    }
+
+                }
+            } else if (menu == 16) {
+                if (biblioteca.listarUsuarios().isEmpty()) {
+                    System.out.println("Não há Usuários cadastrados, adicione um Usuário");
+                } else {
+                    List<Usuario> usuariosAux2 = biblioteca.listarUsuarios();
+
+
+                    for (Usuario usuarioAux : usuariosAux2) {
+                        System.out.println(usuarioAux.getId() + " " + usuarioAux.getNome());
+                    }
+
+                    System.out.println("Digite o ID do Usuário que você quer Remover:");
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
+                    if (usuariosAux2.stream().anyMatch(usuario -> usuario.getId() == id)) {
+                        biblioteca.removerUsuario(id);
+                        System.out.println("Usuario Removido.");
+                    } else {
+                        System.out.println("Não há Usuários com esse ID.");
+                    }
+                }
+            } else if (menu == 17) {
+                if (biblioteca.listarAutores().isEmpty()) {
+                    System.out.println("Não há Autores cadastrados, adicione um Autor");
+                } else {
+                    List<Autor> autoresAux2 = biblioteca.listarAutores();
+
+
+                    for (Autor autoresAux : autoresAux2) {
+                        System.out.println(autoresAux.getId() + " " + autoresAux.getNome());
+                    }
+
+                    System.out.println("Digite o ID do Autor que você Remover:");
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
+                    if (autoresAux2.stream().anyMatch(autor -> autor.getId() == id)) {
+                        biblioteca.removerAutor(id);
+                        System.out.println("Autor Removido.");
+                    } else {
+                        System.out.println("Não há Autores com esse ID.");
+                    }
+                }
+            }else if (menu == 0) {
+                System.out.println("Saindo...");
+            } else {
+                System.out.println("Opção inválida! Por favor, escolha uma opção válida.");
+            }
         }
     }
 }

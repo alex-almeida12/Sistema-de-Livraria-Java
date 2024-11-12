@@ -120,6 +120,15 @@ public class Biblioteca {
         return usuarios;
     }
 
+    public void atualizarUsuario(int id, String novoUsuario) {
+        for (Usuario usuario : usuarios) {
+            if (usuario.getId() == id) {
+                usuario.setNome(novoUsuario);
+                break;
+            }
+        }
+    }
+
     public void removerUsuario(int id) {
         usuarios.removeIf(usuario -> usuario.getId() == id);
     }
